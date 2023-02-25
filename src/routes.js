@@ -2,73 +2,62 @@ import React from "react";
 
 import { Icon } from "@chakra-ui/react";
 import {
-  MdBarChart,
   MdPerson,
-  MdHome,
-  MdLock,
-  MdOutlineShoppingCart,
+  MdSchedule,
+  MdClass,
+  MdDashboard
 } from "react-icons/md";
 
 // Admin Imports
-import MainDashboard from "views/admin/default";
-import NFTMarketplace from "views/admin/marketplace";
-import Profile from "views/admin/profile";
-import DataTables from "views/admin/dataTables";
-import RTL from "views/admin/rtl";
-
-// Auth Imports
-import SignInCentered from "views/auth/signIn";
+import Auth from "views/auth/signIn"
+import Class from "views/staff/class";
+import Lecture from "views/staff/lecture";
+import User from "views/staff/user";
+import Schedule from "views/staff/schedule";
 
 const routes = [
   {
-    name: "Main Dashboard",
-    layout: "/admin",
-    path: "/default",
-    icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
-    component: MainDashboard,
-  },
-  {
-    name: "NFT Marketplace",
-    layout: "/admin",
-    path: "/nft-marketplace",
+    name: "User",
+    layout: "/staff",
+    path: "/user",
     icon: (
       <Icon
-        as={MdOutlineShoppingCart}
+        as={MdPerson}
         width='20px'
         height='20px'
         color='inherit'
       />
     ),
-    component: NFTMarketplace,
+    component: User,
     secondary: true,
   },
   {
-    name: "Data Tables",
-    layout: "/admin",
-    icon: <Icon as={MdBarChart} width='20px' height='20px' color='inherit' />,
-    path: "/data-tables",
-    component: DataTables,
+    name: "Class",
+    layout: "/staff",
+    icon: <Icon as={MdDashboard} width='20px' height='20px' color='inherit' />,
+    path: "/class",
+    component: Class,
   },
   {
-    name: "Profile",
-    layout: "/admin",
-    path: "/profile",
-    icon: <Icon as={MdPerson} width='20px' height='20px' color='inherit' />,
-    component: Profile,
+    name: "Lecture",
+    layout: "/staff",
+    icon: <Icon as={MdClass} width='20px' height='20px' color='inherit' />,
+    path: "/lecture",
+    component: Lecture,
   },
   {
-    name: "Sign In",
+    name: "Schedule",
+    layout: "/staff",
+    path: "/schedule",
+    icon: <Icon as={MdSchedule} width='20px' height='20px' color='inherit' />,
+    component: Schedule,
+  },
+  {
+    name: "Auth",
     layout: "/auth",
     path: "/sign-in",
-    icon: <Icon as={MdLock} width='20px' height='20px' color='inherit' />,
-    component: SignInCentered,
-  },
-  {
-    name: "RTL Admin",
-    layout: "/rtl",
-    path: "/rtl-default",
-    icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
-    component: RTL,
+    icon: <Icon as={MdSchedule} width='20px' height='20px' color='inherit' />,
+    component: Auth,
   },
 ];
 
