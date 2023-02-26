@@ -2,7 +2,7 @@
 import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, SimpleGrid, Text } from "@chakra-ui/react";
 import DevelopmentTable from "views/staff/class/components/DevelopmentTable";
 import {
-  columnsClass,
+  columnsClass
 } from "views/staff/class/variables/columnsData";
 import React, { useEffect, useState } from "react";
 import Card from "components/card/Card";
@@ -10,12 +10,12 @@ import Form from "./components/Form";
 import Alerts from "./components/Alert";
 import axios from "axios";
 
-export default function Settings() {
+export default function Class(props) {
   const [classes, setClasses] = useState([]);
   const [dataStatus, setDataStatus] = useState(0);
   const [refresh, setRefresh] = useState(true);
   const text = "Class";
-  
+
   const getClasses = async () => {
     try {
       let res = await axios({
@@ -52,7 +52,7 @@ export default function Settings() {
   }
 
   return (
-    <Box>
+    <>
       {
         dataStatus === 201? successAlert(): failedAlert()
       }
@@ -65,7 +65,7 @@ export default function Settings() {
             <AccordionItem>
               <AccordionButton>
                 <Box as="span" flex='1' textAlign='left'>
-                  <Text 
+                  <Text
                     fontSize='20px'
                     fontWeight='700'>
                     Add {text}
@@ -85,8 +85,11 @@ export default function Settings() {
           text={text}
           refresh={refresh} 
           setRefresh={setRefresh}
+          setSeeClassLog={props.setSeeClassLog}
+          setClassID={props.setClassID}
+          setClassName={props.setClassName}
         />
       </SimpleGrid>
-    </Box>
+    </>
   );
 }

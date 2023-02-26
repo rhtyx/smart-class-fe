@@ -24,7 +24,17 @@ import {
 } from "react-table";
 
 export default function DevelopmentTable(props) {
-    const { columnsData, tableData } = props;
+  const { columnsData, tableData } = props;
+
+  const composeSeeClassLogFunc = (classID, className) => {
+    const handleSeeClassLog = () => {
+      props.setClassID(classID);
+      props.setClassName(className)
+      props.setSeeClassLog(true);
+    }
+
+    return handleSeeClassLog
+  }
 
   const composeFunc = (id) => {
     let url = `//localhost:309/class/${id}`;
@@ -129,6 +139,7 @@ export default function DevelopmentTable(props) {
                       </Text>
                     );
                   } else if (cell.column.Header === "ACTION") {
+                    const seeClassLog = composeSeeClassLogFunc(cell.value, row.original.name)
                     const deleteClass = composeFunc(cell.value);
                     data = (
                       <Stack direction={"row"} spacing={4} align={"center"}>
@@ -140,7 +151,7 @@ export default function DevelopmentTable(props) {
                           borderRadius='70px'
                           px='24px'
                           py='5px'
-                          onClick={() => {}}>
+                          onClick={seeClassLog}>
                           See Log
                         </Button>
                         <Button
