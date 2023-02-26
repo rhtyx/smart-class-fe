@@ -32,7 +32,7 @@ export default function Settings() {
         method: "get",
         url: "//localhost:309/lecture",
         headers: {
-          "Authorization": "Bearer " + process.env.REACT_APP_TOKEN
+          "Authorization": "Bearer " + localStorage.getItem("token")
         },
       })
       setLectures(res.data.data);
@@ -62,7 +62,7 @@ export default function Settings() {
   }
 
   return (
-    <Box pt={{ base: "130px", md: "80px", xl: "80px" }}>
+    <Box>
       {
         dataStatus === 201? successAlert(): failedAlert()
       }

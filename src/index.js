@@ -14,9 +14,17 @@ ReactDOM.render(
       <ThemeEditorProvider>
         <HashRouter>
           <Switch>
-            <Route path={`/auth`} component={AuthLayout} />
-            <Route path={`/staff`} component={StaffLayout} />
-            <Redirect from='/' to='/staff/user' />
+            <Route path={`/auth`}>
+              {
+                localStorage.getItem("token")? <Redirect to={"/staff"} /> : <AuthLayout />
+              }
+            </Route>
+            <Route path={`/staff`}>
+              {
+                localStorage.getItem("token") === null? <Redirect to={"/auth"} /> : <StaffLayout />
+              }
+            </Route>
+            <Redirect from='/' to='/auth' />
           </Switch>
         </HashRouter>
       </ThemeEditorProvider>

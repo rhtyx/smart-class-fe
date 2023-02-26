@@ -2,7 +2,6 @@
 import {
   Button,
   Flex,
-  Progress,
   Stack,
   Table,
   Tbody,
@@ -35,7 +34,7 @@ export default function DevelopmentTable(props) {
           method: "delete",
           url: url,
           headers: {
-            "Authorization": "Bearer " + process.env.REACT_APP_TOKEN
+            "Authorization": "Bearer " + localStorage.getItem("token")
           },
         }).then((res) => {
           props.setRefresh(!props.refresh);

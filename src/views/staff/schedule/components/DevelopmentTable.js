@@ -2,7 +2,7 @@
 import {
   Button,
   Flex,
-  Progress,
+  Icon,
   Stack,
   Table,
   Tbody,
@@ -13,6 +13,9 @@ import {
   Tr,
   useColorModeValue,
 } from "@chakra-ui/react";
+import {
+  MdDownload
+} from "react-icons/md";
 import axios from "axios";
 // Custom components
 import Card from "components/card/Card";
@@ -51,7 +54,7 @@ export default function DevelopmentTable(props) {
           method: "delete",
           url: url,
           headers: {
-            "Authorization": "Bearer " + process.env.REACT_APP_TOKEN
+            "Authorization": "Bearer " + localStorage.getItem("token")
           },
         }).then((res) => {
           props.setRefresh(!props.refresh);
@@ -171,6 +174,23 @@ export default function DevelopmentTable(props) {
                     data = (
                       <>
                         <Stack direction={"row"} spacing={4} align={"center"}>
+                          <Button
+                            colorScheme="teal"
+                            color='white'
+                            fontSize='sm'
+                            fontWeight='500'
+                            borderRadius='70px'
+                            px='16px'
+                            py='5px'
+                            onClick={() => {}}>
+                            <Icon
+                              as={MdDownload}
+                              width='20px'
+                              height='20px'
+                              mr="5px"
+                              color='inherit' />
+                            Presence List
+                          </Button>
                           <Button
                             colorScheme="telegram"
                             color='white'

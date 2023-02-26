@@ -22,7 +22,7 @@ export default function Settings() {
         method: "get",
         url: "//localhost:309/class",
         headers: {
-          "Authorization": "Bearer " + process.env.REACT_APP_TOKEN
+          "Authorization": "Bearer " + localStorage.getItem("token")
         },
       })
       setClasses(res.data.data);

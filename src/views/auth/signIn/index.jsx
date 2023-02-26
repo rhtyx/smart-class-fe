@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 // Chakra imports
 import {
   Box,
@@ -20,13 +20,61 @@ import DefaultAuth from "layouts/auth/Default";
 import illustration from "assets/img/auth/auth.png";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { RiEyeCloseLine } from "react-icons/ri";
+import axios from "axios";
+import { Redirect } from "react-router-dom";
+import Alerts from "./components/Alert";
 
 function SignIn() {
-  // Chakra color mode
   const textColor = useColorModeValue("navy.700", "white");
   const textColorSecondary = "gray.400";
   const textColorDetails = useColorModeValue("navy.700", "secondaryGray.600");
   const brandStars = useColorModeValue("brand.500", "brand.400");
+
+  const [dataStatus, setDataStatus] = useState(0)
+  const [formLogin, setFormLogin] = useState({
+    username: "",
+    password: ""
+  })
+
+  const handleLogin = () => {
+    try {
+      axios({
+        method: "post",
+        url: "//localhost:309/auth/login",
+        headers: {
+          "Authorization": "Bearer " + localStorage.getItem("token")
+        },
+        data: formLogin,
+      }).then((res)=>{
+        localStorage.setItem("token", res.data.refresh_token)
+        setFormLogin({
+          username: "",
+          password: ""
+        });
+        window.location.reload();
+      }).catch((err) => {
+        console.log(err)
+        setDataStatus(err.response.status);
+      })
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleChange = (e) => {
+    setFormLogin({
+      ...formLogin,
+      [e.target.name]: e.target.value,
+    })
+  }
+
+  const failedAlert = () => {
+    return (
+      <Alerts status="error" isOpen={dataStatus !== 0} setDataStatus={setDataStatus}>
+        Failed login.
+      </Alerts>
+    )
+  }
   
   const [show, setShow] = React.useState(false);
   const handleClick = () => setShow(!show);
@@ -45,6 +93,9 @@ function SignIn() {
         mt={{ base: "40px", md: "14vh" }}
         flexDirection='column'>
         <Box me='auto'>
+          {
+            dataStatus === 401? failedAlert() : <></>
+          }
           <Heading color={textColor} fontSize='36px' mb='10px'>
             Sign In
           </Heading>
@@ -78,6 +129,9 @@ function SignIn() {
               Username<Text color={brandStars}>*</Text>
             </FormLabel>
             <Input
+              name="username"
+              value={formLogin.username}
+              onChange={handleChange}
               isRequired={true}
               variant='auth'
               fontSize='sm'
@@ -98,6 +152,9 @@ function SignIn() {
             </FormLabel>
             <InputGroup size='md'>
               <Input
+                name="password"
+                value={formLogin.password}
+                onChange={handleChange}
                 isRequired={true}
                 fontSize='sm'
                 placeholder='Min. 8 characters'
@@ -116,6 +173,7 @@ function SignIn() {
               </InputRightElement>
             </InputGroup>
             <Button
+              onClick={handleLogin}
               fontSize='sm'
               variant='brand'
               fontWeight='500'

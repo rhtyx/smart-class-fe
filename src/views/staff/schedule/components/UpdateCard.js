@@ -45,7 +45,7 @@ export default function UpdateCard(props) {
         method: "put",
         url: props.formUpdate.url,
         headers: {
-          "Authorization": "Bearer " + process.env.REACT_APP_TOKEN
+          "Authorization": "Bearer " + localStorage.getItem("token")
         },
         data: props.formUpdate,
       }).then((res)=>{
@@ -75,7 +75,6 @@ export default function UpdateCard(props) {
     })
   }
 
-  console.log(props.formUpdate)
   return (
     <Card px='25px'>
       <Flex justify='space-between' mb='20px' align='center'>

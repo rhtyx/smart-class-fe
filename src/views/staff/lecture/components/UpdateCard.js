@@ -28,7 +28,7 @@ export default function UpdateCard(props) {
         method: "put",
         url: props.formUpdate.url,
         headers: {
-          "Authorization": "Bearer " + process.env.REACT_APP_TOKEN
+          "Authorization": "Bearer " + localStorage.getItem("token")
         },
         data: props.formUpdate,
       }).then((res)=>{

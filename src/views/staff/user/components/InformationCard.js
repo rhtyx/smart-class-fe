@@ -8,12 +8,13 @@ import Information from "./Information";
 // Assets
 export default function InformationCard(props) {
   const { ...rest } = props;
-  // Chakra Color Mode
+
   const textColorPrimary = useColorModeValue("secondaryGray.900", "white");
   const cardShadow = useColorModeValue(
     "0px 18px 40px rgba(112, 144, 176, 0.12)",
     "unset"
   );
+
   return (
     <Card mb={{ base: "0px", "2xl": "20px" }} {...rest}>
       <Text
@@ -27,33 +28,28 @@ export default function InformationCard(props) {
       <SimpleGrid columns='2' gap='20px'>
         <Information
           boxShadow={cardShadow}
-          title='ID'
-          value='Stanford University'
+          title={props.user.id.toString().length > 7 ? "NIP" : "NIM"}
+          value={props.user.id}
         />
         <Information
           boxShadow={cardShadow}
-          title='RFID'
-          value='English, Spanish, Italian'
-        />
-        <Information
-          boxShadow={cardShadow}
-          title='Name'
-          value='Product Design'
+          title='email'
+          value={props.user.email}
         />
         <Information
           boxShadow={cardShadow}
           title='Name'
-          value='Google, Facebook'
+          value={props.user.name}
         />
         <Information
           boxShadow={cardShadow}
           title='Username'
-          value='Simmmple Web LLC'
+          value={props.user.username}
         />
         <Information
           boxShadow={cardShadow}
           title='Role'
-          value='20 July 1986'
+          value={props.user.role}
         />
       </SimpleGrid>
     </Card>

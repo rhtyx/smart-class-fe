@@ -16,7 +16,7 @@ export default function Form(props) {
         method: "get",
         url: "//localhost:309/lecture",
         headers: {
-          "Authorization": "Bearer " + process.env.REACT_APP_TOKEN
+          "Authorization": "Bearer " + localStorage.getItem("token")
         },
       })
       props.setLectures(res.data.data);
@@ -37,7 +37,7 @@ export default function Form(props) {
         method: "get",
         url: "//localhost:309/class",
         headers: {
-          "Authorization": "Bearer " + process.env.REACT_APP_TOKEN
+          "Authorization": "Bearer " + localStorage.getItem("token")
         },
       })
       props.setClasses(res.data.data);
@@ -62,7 +62,7 @@ export default function Form(props) {
         method: "post",
         url: "//localhost:309/class_schedule",
         headers: {
-          "Authorization": "Bearer " + process.env.REACT_APP_TOKEN
+          "Authorization": "Bearer " + localStorage.getItem("token")
         },
         data: formValue,
       }).then((res)=>{
@@ -92,7 +92,6 @@ export default function Form(props) {
     getClasses();
   }, [])
 
-  console.log(formValue)
   return (
     <FormControl isRequired>
       <FormLabel>Lecture</FormLabel>

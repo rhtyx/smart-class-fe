@@ -13,7 +13,7 @@ export default function Form(props) {
         method: "post",
         url: "//localhost:309/class",
         headers: {
-          "Authorization": "Bearer " + process.env.REACT_APP_TOKEN
+          "Authorization": "Bearer " + localStorage.getItem("token")
         },
         data: formValue,
       }).then((res)=>{

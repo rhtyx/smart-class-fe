@@ -16,7 +16,7 @@ export default function Form(props) {
         method: "get",
         url: "//localhost:309/user/?role=2",
         headers: {
-          "Authorization": "Bearer " + process.env.REACT_APP_TOKEN
+          "Authorization": "Bearer " + localStorage.getItem("token")
         },
       }).then((res)=>{
         props.setLecturers(res.data.data);
@@ -39,7 +39,7 @@ export default function Form(props) {
         method: "post",
         url: "//localhost:309/lecture",
         headers: {
-          "Authorization": "Bearer " + process.env.REACT_APP_TOKEN
+          "Authorization": "Bearer " + localStorage.getItem("token")
         },
         data: formValue,
       }).then((res)=>{
