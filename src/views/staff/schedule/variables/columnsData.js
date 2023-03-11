@@ -4,6 +4,10 @@ export const columnsSchedule = [
     accessor: "lecture_code",
   },
   {
+    Header: "LECTURER",
+    accessor: "lecturer",
+  },
+  {
     Header: "CLASS",
     accessor: "class",
   },

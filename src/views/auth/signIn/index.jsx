@@ -21,8 +21,17 @@ import illustration from "assets/img/auth/auth.png";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { RiEyeCloseLine } from "react-icons/ri";
 import axios from "axios";
-import { Redirect } from "react-router-dom";
 import Alerts from "./components/Alert";
+
+function parseJwt (token) {
+  var base64Url = token.split('.')[1];
+  var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  }).join(''));
+
+  return JSON.parse(jsonPayload);
+}
 
 function SignIn() {
   const textColor = useColorModeValue("navy.700", "white");
@@ -47,6 +56,9 @@ function SignIn() {
         data: formLogin,
       }).then((res)=>{
         localStorage.setItem("token", res.data.refresh_token)
+        const JWTRes = parseJwt(res.data.refresh_token)
+        localStorage.setItem("role", JWTRes.role)
+        localStorage.setItem("user_id", JWTRes.user_id)
         setFormLogin({
           username: "",
           password: ""

@@ -1,7 +1,6 @@
-/* eslint-disable */
+
 import {
   Flex,
-  Progress,
   Table,
   Tbody,
   Td,
@@ -13,8 +12,6 @@ import {
 } from "@chakra-ui/react";
 // Custom components
 import Card from "components/card/Card";
-import { AndroidLogo, AppleLogo, WindowsLogo } from "components/icons/Icons";
-import Menu from "components/menu/MainMenu";
 import React, { useMemo } from "react";
 import {
   useGlobalFilter,
@@ -23,7 +20,7 @@ import {
   useTable,
 } from "react-table";
 
-export default function DevelopmentTable(props) {
+export default function LectureCard(props) {
   const { columnsData, tableData } = props;
 
   const columns = useMemo(() => columnsData, [columnsData]);
@@ -50,7 +47,6 @@ export default function DevelopmentTable(props) {
   initialState.pageSize = 11;
 
   const textColor = useColorModeValue("secondaryGray.900", "white");
-  const iconColor = useColorModeValue("secondaryGray.500", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
   return (
     <Card
@@ -66,7 +62,6 @@ export default function DevelopmentTable(props) {
           lineHeight='100%'>
           {props.text}
         </Text>
-        {/* <Menu /> */}
       </Flex>
       <Table {...getTableProps()} variant='simple' color='gray.500' mb='24px'>
         <Thead>
@@ -97,28 +92,38 @@ export default function DevelopmentTable(props) {
               <Tr {...row.getRowProps()} key={index}>
                 {row.cells.map((cell, index) => {
                   let data = "";
-                  if (cell.column.Header === "NIM") {
+                  if (cell.column.Header === "LECTURE CODE") {
                     data = (
                       <Text color={textColor} fontSize='sm' fontWeight='700'>
                         {cell.value}
                       </Text>
                     );
-                  } else if (cell.column.Header === "NAME") {
+                  } else if (cell.column.Header === "LECTURER") {
                     data = (
                       <Text color={textColor} fontSize='sm' fontWeight='700'>
                         {cell.value}
                       </Text>
                     );
-                  } else if (cell.column.Header === "EMAIL") {
+                  } else if (cell.column.Header === "CLASS") {
                     data = (
                       <Text color={textColor} fontSize='sm' fontWeight='700'>
                         {cell.value}
                       </Text>
                     );
-                  } else if (cell.column.Header === "ROLE") {
+                  } else if (cell.column.Header === "START AT") {
+                    const dateArray = cell.value.split(" ")
+                    let startAt = new Date(`${dateArray[0]} ${dateArray[1]}`);
                     data = (
                       <Text color={textColor} fontSize='sm' fontWeight='700'>
-                        {cell.value}
+                        {`${startAt.toLocaleString('id-ID', {weekday: 'long'})}, ${startAt.toLocaleTimeString('id-ID')}`}
+                      </Text>
+                    );
+                  } else if (cell.column.Header === "END AT") {
+                    const dateArray = cell.value.split(" ")
+                    let endAt = new Date(`${dateArray[0]} ${dateArray[1]}`);
+                    data = (
+                      <Text color={textColor} fontSize='sm' fontWeight='700'>
+                        {`${endAt.toLocaleString('id-ID', {weekday: 'long'})}, ${endAt.toLocaleTimeString('id-ID')}`}
                       </Text>
                     );
                   }

@@ -54,8 +54,12 @@ export default function Form(props) {
 
   const handleSubmit = () => {
     formValue.lecture_code = formValue.lecture_code.toLocaleUpperCase();
-    formValue.start_at = new Date(formValue.start_at).toISOString();
-    formValue.end_at = new Date(formValue.end_at).toISOString();
+    let start_at = new Date(formValue.start_at);
+    start_at.setHours(start_at.getHours() + 7);
+    formValue.start_at = start_at.toISOString();
+    let end_at = new Date(formValue.end_at);
+    end_at.setHours(end_at.getHours() + 7);
+    formValue.end_at = end_at.toISOString();
     
     try {
       axios({

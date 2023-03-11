@@ -7,7 +7,6 @@ import { Box, useColorModeValue } from "@chakra-ui/react";
 
 // Layout components
 import { SidebarContext } from "contexts/SidebarContext";
-import StaffLayout from "layouts/staff";
 
 // Custom Chakra theme
 export default function Auth() {

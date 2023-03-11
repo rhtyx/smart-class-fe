@@ -15,50 +15,81 @@ import Lecture from "views/staff/lecture";
 import User from "views/staff/user";
 import Schedule from "views/staff/schedule";
 
-const routes = [
-  {
-    name: "User",
-    layout: "/staff",
-    path: "/user",
-    icon: (
-      <Icon
-        as={MdPerson}
-        width='20px'
-        height='20px'
-        color='inherit'
-      />
-    ),
-    component: User,
-    secondary: true,
-  },
-  {
-    name: "Class",
-    layout: "/staff",
-    icon: <Icon as={MdDashboard} width='20px' height='20px' color='inherit' />,
-    path: "/class",
-    component: Class,
-  },
-  {
-    name: "Lecture",
-    layout: "/staff",
-    icon: <Icon as={MdClass} width='20px' height='20px' color='inherit' />,
-    path: "/lecture",
-    component: Lecture,
-  },
-  {
-    name: "Schedule",
-    layout: "/staff",
-    path: "/schedule",
-    icon: <Icon as={MdSchedule} width='20px' height='20px' color='inherit' />,
-    component: Schedule,
-  },
+const role = localStorage.getItem("role");
+let routes = [
   {
     name: "Auth",
     layout: "/auth",
     path: "/sign-in",
     icon: <Icon as={MdSchedule} width='20px' height='20px' color='inherit' />,
     component: Auth,
-  },
+  }
 ];
+
+if (role === 'STAFF') {
+  routes.push(
+    {
+      name: "User",
+      layout: "/staff",
+      path: "/user",
+      icon: (
+        <Icon
+          as={MdPerson}
+          width='20px'
+          height='20px'
+          color='inherit'
+        />
+      ),
+      component: User,
+      secondary: true,
+    },
+    {
+      name: "Class",
+      layout: "/staff",
+      icon: <Icon as={MdDashboard} width='20px' height='20px' color='inherit' />,
+      path: "/class",
+      component: Class,
+    },
+    {
+      name: "Lecture",
+      layout: "/staff",
+      icon: <Icon as={MdClass} width='20px' height='20px' color='inherit' />,
+      path: "/lecture",
+      component: Lecture,
+    },
+    {
+      name: "Schedule",
+      layout: "/staff",
+      path: "/schedule",
+      icon: <Icon as={MdSchedule} width='20px' height='20px' color='inherit' />,
+      component: Schedule,
+    }
+  );
+} else if (role === 'STUDENT') {
+  routes.push(
+    {
+      name: "User",
+      layout: "/staff",
+      path: "/user",
+      icon: (
+        <Icon
+          as={MdPerson}
+          width='20px'
+          height='20px'
+          color='inherit'
+        />
+      ),
+      component: User,
+      secondary: true,
+    },
+    {
+      name: "Schedule",
+      layout: "/staff",
+      path: "/schedule",
+      icon: <Icon as={MdSchedule} width='20px' height='20px' color='inherit' />,
+      component: Schedule,
+    }
+  );
+}
 
 export default routes;

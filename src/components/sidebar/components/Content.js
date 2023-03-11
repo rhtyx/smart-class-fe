@@ -6,8 +6,6 @@ import Brand from "components/sidebar/components/Brand";
 import Links from "components/sidebar/components/Links";
 import React from "react";
 
-// FUNCTIONS
-
 function SidebarContent(props) {
   const handleLogout = () => {
     try {
@@ -18,7 +16,7 @@ function SidebarContent(props) {
           "Authorization": "Bearer " + localStorage.getItem("token")
         },
       }).then((res)=>{
-        localStorage.removeItem("token");
+        localStorage.clear();
         window.location.reload();
       })
     } catch (error) {

@@ -37,8 +37,14 @@ export default function UpdateCard(props) {
   }
 
   const handleUpdate = () => {
-    props.formUpdate.start_at = new Date(props.formUpdate.start_at).toISOString();; 
-    props.formUpdate.end_at = new Date(props.formUpdate.end_at).toISOString();; 
+    let start_at = new Date(props.formUpdate.start_at);
+    start_at.setHours(start_at.getHours() + 7);
+    props.formUpdate.start_at = start_at.toISOString();
+    let end_at = new Date(props.formUpdate.end_at);
+    end_at.setHours(end_at.getHours() + 7); 
+    props.formUpdate.end_at = end_at.toISOString();
+    console.log(start_at)
+    console.log(end_at)
     
     try {
       axios({

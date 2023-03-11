@@ -33,7 +33,7 @@ export default function InformationCard(props) {
         />
         <Information
           boxShadow={cardShadow}
-          title='email'
+          title='Email'
           value={props.user.email}
         />
         <Information

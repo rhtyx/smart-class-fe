@@ -19,7 +19,7 @@ import {
 import axios from "axios";
 // Custom components
 import Card from "components/card/Card";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   useGlobalFilter,
   usePagination,
@@ -29,6 +29,27 @@ import {
 
 export default function DevelopmentTable(props) {
   const { columnsData, tableData } = props;
+  const [ CSVData, setCSVData ] = useState("")
+
+  const composeAssignFunc = (url) => {
+    const handleAssign = () => {
+      try {
+        axios({
+          method: "post",
+          url: url,
+          headers: {
+            "Authorization": "Bearer " + localStorage.getItem("token")
+          },
+        }).then((res) => {
+          props.setRefresh(!props.refresh);
+        })
+      } catch (error) {
+        console.log(error.message);
+      }
+    }
+
+    return handleAssign
+  }
 
   const composeUpdateFunc = (url, lecture_code, class_id, start_at, end_at) => {
     let startAt = new Date(start_at).toISOString();
@@ -65,6 +86,27 @@ export default function DevelopmentTable(props) {
     }
 
     return handleDelete
+  }
+
+  const composeGetPresenceListFunc = (class_schedule_id) => {
+    let url = `//localhost:309/class_schedule/presence_list/?class_schedule_id=${class_schedule_id}`;
+    const handleGetPresenceList = () => {
+      try {
+        axios({
+          method: "get",
+          url: url,
+          headers: {
+            "Authorization": "Bearer " + localStorage.getItem("token")
+          },
+        }).then((res) => {
+          setCSVData(res.data);
+        })
+      } catch (error) {
+        console.log(error.message);
+      }
+    }
+
+    return handleGetPresenceList
   }
 
   const columns = useMemo(() => columnsData, [columnsData]);
@@ -148,75 +190,119 @@ export default function DevelopmentTable(props) {
                         {cell.value}
                       </Text>
                     );
-                  } else if (cell.column.Header === "START AT") {
-                    let startAt = new Date(cell.value);
+                  } else if (cell.column.Header === "LECTURER") {
                     data = (
                       <Text color={textColor} fontSize='sm' fontWeight='700'>
-                        {`${startAt.toLocaleString('en-us', {weekday: 'long'})}, ${startAt.toLocaleTimeString('en-US')}`}
+                        {cell.value}
+                      </Text>
+                    );
+                  } else if (cell.column.Header === "START AT") {
+                    const dateArray = cell.value.split(" ")
+                    let startAt = new Date(`${dateArray[0]} ${dateArray[1]}`);
+                    data = (
+                      <Text color={textColor} fontSize='sm' fontWeight='700'>
+                        {`${startAt.toLocaleString('id-ID', {weekday: 'long'})}, ${startAt.toLocaleTimeString('id-ID')}`}
                       </Text>
                     );
                   } else if (cell.column.Header === "END AT") {
-                    let endAt = new Date(cell.value);
+                    const dateArray = cell.value.split(" ")
+                    let endAt = new Date(`${dateArray[0]} ${dateArray[1]}`);
                     data = (
                       <Text color={textColor} fontSize='sm' fontWeight='700'>
-                        {`${endAt.toLocaleString('en-us', {weekday: 'long'})}, ${endAt.toLocaleTimeString('en-US')}`}
+                        {`${endAt.toLocaleString('id-ID', {weekday: 'long'})}, ${endAt.toLocaleTimeString('id-ID')}`}
                       </Text>
                     );
                   } else if (cell.column.Header === "ACTION") {
-                    const handleUpdate = composeUpdateFunc(
-                      `//localhost:309/class_schedule/${row.original.id}`,
-                      row.original.lecture_code,
-                      row.original.class_id,
-                      row.original.start_at,
-                      row.original.end_at,
-                    )
-                    const handleDelete = composeDeleteFunc(row.original.id)
-                    data = (
-                      <>
-                        <Stack direction={"row"} spacing={4} align={"center"}>
-                          <Button
-                            colorScheme="teal"
-                            color='white'
-                            fontSize='sm'
-                            fontWeight='500'
-                            borderRadius='70px'
-                            px='16px'
-                            py='5px'
-                            onClick={() => {}}>
-                            <Icon
-                              as={MdDownload}
-                              width='20px'
-                              height='20px'
-                              mr="5px"
-                              color='inherit' />
-                            Presence List
-                          </Button>
-                          <Button
-                            colorScheme="telegram"
-                            color='white'
-                            fontSize='sm'
-                            fontWeight='500'
-                            borderRadius='70px'
-                            px='24px'
-                            py='5px'
-                            onClick={handleUpdate}>
-                            Update
-                          </Button>
-                          <Button
-                            colorScheme="red"
-                            color='white'
-                            fontSize='sm'
-                            fontWeight='500'
-                            borderRadius='70px'
-                            px='24px'
-                            py='5px'
-                            onClick={handleDelete}>
-                            Delete
-                          </Button>
-                        </Stack>
-                      </>
-                    );
-                  }
+                    if (localStorage.getItem('role') === 'STUDENT') {
+                      if (!row.original.is_assigned) {
+                        const handleAssign = composeAssignFunc(`//localhost:309/class_user_schedule/?class_schedule_id=${row.original.id}`)
+                        data = (
+                          <Stack direction={"row"} spacing={4} align={"center"}>
+                            <Button
+                              colorScheme="telegram"
+                              color='white'
+                              fontSize='sm'
+                              fontWeight='500'
+                              borderRadius='70px'
+                              px='24px'
+                              py='5px'
+                              onClick={handleAssign}>
+                              Assign
+                            </Button>
+                          </Stack> 
+                        )
+                      } else {
+                        data = (
+                          <Text 
+                            fontSize='15px'
+                            fontWeight='700'
+                            color="purple.700">
+                            Assigned
+                          </Text>
+                        )
+                      }
+                    } else {
+                      const fileName = `${row.original.lecture_code}_${row.original.class}.csv`
+                      const handleUpdate = composeUpdateFunc(
+                        `//localhost:309/class_schedule/${row.original.id}`,
+                        row.original.lecture_code,
+                        row.original.class_id,
+                        row.original.start_at,
+                        row.original.end_at,
+                      )
+                      const handleDelete = composeDeleteFunc(row.original.id)
+                      const handleGetPresenceList = composeGetPresenceListFunc(row.original.id)
+                      data = (
+                        <>
+                          <Stack direction={"row"} spacing={4} align={"center"}>
+                            <a
+                            href={`data:text/csv;charset=utf-8,${CSVData}`}
+                            download={fileName} >
+                              <Button
+                                colorScheme="teal"
+                                color='white'
+                                fontSize='sm'
+                                fontWeight='500'
+                                borderRadius='70px'
+                                px='16px'
+                                py='5px'
+                                onClick={handleGetPresenceList} >
+                                <Icon
+                                  as={MdDownload}
+                                  width='20px'
+                                  height='20px'
+                                  mr="5px"
+                                  color='inherit' />
+                                Presence List
+                              </Button>
+                            </a>
+                            <Button
+                              colorScheme="telegram"
+                              color='white'
+                              fontSize='sm'
+                              fontWeight='500'
+                              borderRadius='70px'
+                              px='24px'
+                              py='5px'
+                              onClick={handleUpdate}>
+                              Update
+                            </Button>
+                            <Button
+                              colorScheme="red"
+                              color='white'
+                              fontSize='sm'
+                              fontWeight='500'
+                              borderRadius='70px'
+                              px='24px'
+                              py='5px'
+                              onClick={handleDelete}>
+                              Delete
+                            </Button>
+                          </Stack>
+                        </>
+                      );
+                    }
+                    }
                   return (
                     <Td
                       {...cell.getCellProps()}
